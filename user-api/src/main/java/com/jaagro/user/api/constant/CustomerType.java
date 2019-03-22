@@ -20,4 +20,9 @@ public final class CustomerType {
      * 卸货地客户
      */
     public final static Integer UNLOAD_SITE = 3;
+
+    /**
+     * 养殖客户
+     */
+    public final static Integer FARMERS = 20;
 }

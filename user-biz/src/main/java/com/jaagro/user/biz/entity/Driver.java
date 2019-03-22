@@ -3,16 +3,20 @@ package com.jaagro.user.biz.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-public class Driver implements Serializable {
+public class Driver {
     /**
      * 主键司机ID
      */
     private Integer id;
+
+    /**
+     * 
+     */
+    private Integer tenantId;
 
     /**
      * 关联车队表ID
@@ -35,7 +39,8 @@ public class Driver implements Serializable {
     private String identityCard;
 
     /**
-     * 驾照类型(1 A1 2 B1 3 C1 4 C2)
+     * 驾照类型
+ (1=A1、2=A2、3=B1、4=B2、5=C1、6=C2)
      */
     private Integer drivingLicense;
 

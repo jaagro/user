@@ -3,29 +3,30 @@ package com.jaagro.user.biz.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author tony
- */
 @Data
 @Accessors(chain = true)
-public class CustomerUser implements Serializable {
+public class CustomerUser {
     /**
      * 用户ID
      */
     private Integer id;
 
     /**
+     * 
+     */
+    private Integer tenantId;
+
+    /**
+     * 客户类型: 1-签约客户 2-装货地客户 3-卸货地客户
+     */
+    private Integer customerType;
+
+    /**
      * 所属客户(关联客户表)
      */
     private Integer relevanceId;
-
-    /**
-     * 客户类型(1-项目客户 2 客户装卸货地)
-     */
-    private Integer customerType;
 
     /**
      * 登录用户名(默认使用手机号码)
@@ -41,6 +42,11 @@ public class CustomerUser implements Serializable {
      * 加盐值
      */
     private String salt;
+
+    /**
+     * 帐号状态(0；未审核  1；审核未通过 2－停止合作，3－正常合作)
+     */
+    private Integer status;
 
     /**
      * 显示名称
@@ -86,9 +92,4 @@ public class CustomerUser implements Serializable {
      * 修改时间
      */
     private Date modifyTime;
-
-    /**
-     * 账号状态
-     */
-    private Integer status;
 }

@@ -7,16 +7,22 @@ import com.jaagro.user.api.dto.request.ListEmpCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateEmpDto;
 import com.jaagro.user.api.dto.response.GetRoleDto;
 import com.jaagro.user.api.dto.response.employee.DeleteEmployeeDto;
+import com.jaagro.user.api.dto.response.employee.ListEmployeeDto;
 import com.jaagro.user.api.service.EmployeeRoleService;
 import com.jaagro.user.api.service.EmployeeService;
 import com.jaagro.user.biz.entity.Employee;
-import com.jaagro.user.biz.mapper.*;
+import com.jaagro.user.biz.mapper.DepartmentMapperExt;
+import com.jaagro.user.biz.mapper.EmployeeMapperExt;
+import com.jaagro.user.biz.mapper.EmployeeRoleMapperExt;
+import com.jaagro.user.biz.mapper.RoleMapperExt;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +35,7 @@ import java.util.Map;
  */
 @RestController
 @Api(value = "employee", description = "员工管理", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class EmployeeController {
 
     @Autowired
@@ -275,7 +282,7 @@ public class EmployeeController {
      */
     @ApiOperation("根据部门id查询员工列表")
     @GetMapping("/listEmpByDeptId/{deptId}")
-    public BaseResponse getEmpByDeptId(@PathVariable Integer deptId) {
+    public BaseResponse<List<Employee>> getEmpByDeptId(@PathVariable Integer deptId) {
         if (this.departmentMapper.selectByPrimaryKey(deptId) == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "部门不存在");
         }
@@ -308,6 +315,27 @@ public class EmployeeController {
 
     @GetMapping("/listRoleByEmployeeId/{employeeId}")
     public BaseResponse<List<GetRoleDto>> listRoleByEmployeeId(@PathVariable("employeeId") Integer employeeId) {
-        return BaseResponse.successInstance(employeeService.listRoleByEmployeeId(employeeId));
+        List<GetRoleDto> getRoleDtoList = employeeService.listRoleByEmployeeId(employeeId);
+        log.info("O listRoleByEmployeeId employeeId={},getRoleDtoList={}", employeeId, getRoleDtoList);
+        if (CollectionUtils.isEmpty(getRoleDtoList)) {
+            return BaseResponse.queryDataEmpty();
+        }
+        return BaseResponse.successInstance(getRoleDtoList);
+    }
+
+    /**
+     * 获取技术员列表
+     *
+     * @return
+     * @author yj
+     */
+    @ApiOperation("获取技术员列表")
+    @GetMapping("/listTechnician")
+    public BaseResponse<List<ListEmployeeDto>> listTechnician() {
+        List<ListEmployeeDto> listEmployeeDtoList = employeeMapper.listTechnician();
+        if (CollectionUtils.isEmpty(listEmployeeDtoList)) {
+            return BaseResponse.queryDataEmpty();
+        }
+        return BaseResponse.successInstance(listEmployeeDtoList);
     }
 }

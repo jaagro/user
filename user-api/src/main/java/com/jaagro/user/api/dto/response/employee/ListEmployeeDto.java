@@ -21,4 +21,8 @@ public class ListEmployeeDto implements Serializable {
      */
     private String name;
 
+    /**
+     * 手机号
+     */
+    private String phoneNumber;
 }

@@ -3,16 +3,20 @@ package com.jaagro.user.biz.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-public class Department implements Serializable {
+public class Department {
     /**
      * 部门表主键(网点表)
      */
     private Integer id;
+
+    /**
+     * 
+     */
+    private Integer tenantId;
 
     /**
      * 部门名称
@@ -83,5 +87,4 @@ public class Department implements Serializable {
      * 排序(越小越靠前)
      */
     private Integer sort;
-
 }

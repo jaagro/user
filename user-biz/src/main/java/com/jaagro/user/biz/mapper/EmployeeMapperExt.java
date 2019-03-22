@@ -85,4 +85,10 @@ public interface EmployeeMapperExt extends EmployeeMapper {
      * @return
      */
     List<UserInfo> listUserInfo(@Param("userIdList") List<Integer> userIdList);
+
+    /**
+     * 获取技术员列表
+     * @return
+     */
+    List<ListEmployeeDto> listTechnician();
 }

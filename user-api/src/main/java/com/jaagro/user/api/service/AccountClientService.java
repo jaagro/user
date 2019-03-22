@@ -20,7 +20,7 @@ public interface AccountClientService {
      * @return
      */
     @DeleteMapping("/account/{id}")
-    public BaseResponse deleteAccount(@PathVariable("id") Integer id);
+    BaseResponse deleteAccount(@PathVariable("id") Integer id);
 
     /**
      * 查询账户
@@ -28,7 +28,7 @@ public interface AccountClientService {
      * @return
      */
     @PostMapping("/getByQueryAccountDto")
-    public AccountReturnDto getByQueryAccountDto(@RequestBody QueryAccountDto queryAccountDto);
+    AccountReturnDto getByQueryAccountDto(@RequestBody QueryAccountDto queryAccountDto);
 
     /**
      * 逻辑批量删除账户
@@ -36,5 +36,5 @@ public interface AccountClientService {
      * @return
      */
     @DeleteMapping("/batchDelete")
-    public BaseResponse batchDelete(@RequestBody BatchDeleteAccountDto batchDeleteAccountDto);
+    BaseResponse batchDelete(@RequestBody BatchDeleteAccountDto batchDeleteAccountDto);
 }

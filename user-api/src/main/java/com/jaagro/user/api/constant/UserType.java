@@ -6,29 +6,34 @@ package com.jaagro.user.api.constant;
 public final class UserType {
 
     /**
-     * 客户
+     * 客户，签约客户 全局使用
      */
     public static final String CUSTOMER = "customer";
 
     /**
-     * 装货地客户
+     * 装货地客户，物流业务使用
      */
     public static final String LOAD_SITE = "loadSite";
 
     /**
-     * 卸货地客户
+     * 卸货地客户，物流业务使用
      */
     public static final String UNLOAD_SITE = "unloadSite";
 
     /**
-     * 员工
+     * 员工 全局使用
      */
     public static final String EMPLOYEE = "employee";
 
     /**
-     * 司机
+     * 司机，物流业务使用
      */
     public static final String DRIVER = "driver";
+
+    /**
+     * 养殖农户，养殖业务使用
+     */
+    public static final String FARMERS = "farmers";
 
     /**
      * 游客身份司机(仅填写手机号)

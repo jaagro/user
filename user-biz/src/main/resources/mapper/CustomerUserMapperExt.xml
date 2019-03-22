@@ -3,7 +3,7 @@
 <mapper namespace="com.jaagro.user.biz.mapper.CustomerUserMapperExt" >
 
   <sql id="Info_Column">
-    id, login_name, password, phone_number, salt, status, name, customer_type as user_type
+    id, login_name, password, phone_number, salt, status, name, customer_type as user_type, tenant_id
   </sql>
 
   <select id="getByLoginName" resultType="com.jaagro.constant.UserInfo">

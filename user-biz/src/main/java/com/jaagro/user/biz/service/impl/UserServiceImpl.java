@@ -3,6 +3,7 @@ package com.jaagro.user.biz.service.impl;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.user.api.constant.CustomerType;
 import com.jaagro.user.api.constant.UserType;
+import com.jaagro.user.api.dto.GetTenantDto;
 import com.jaagro.user.api.dto.base.ShowSiteDto;
 import com.jaagro.user.api.dto.response.CustomerRegisterPurposeDto;
 import com.jaagro.user.api.dto.response.DriverReturnDto;
@@ -16,11 +17,13 @@ import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.mapper.CustomerUserMapperExt;
 import com.jaagro.user.biz.mapper.DriverMapperExt;
 import com.jaagro.user.biz.mapper.EmployeeMapperExt;
+import com.jaagro.utils.BaseResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -56,8 +59,6 @@ public class UserServiceImpl implements UserService {
     private HttpServletRequest request;
     @Autowired
     private CrmClientService crmClientService;
-    @Autowired
-    private CustomerUserService customerUserService;
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -66,18 +67,23 @@ public class UserServiceImpl implements UserService {
         String userTypeTrim = map.get(USER_TYPE).toString().replaceAll(" ", "");
         String loginType = (String) map.get(LOGIN_TYPE);
         UserInfo userInfo = null;
-        boolean isCustomer = UserType.CUSTOMER.equals(userTypeTrim) || UserType.VISITOR_CUSTOMER_P.equals(userTypeTrim) || UserType.VISITOR_CUSTOMER_U.equals(userTypeTrim) || UserType.LOAD_SITE.equals(userTypeTrim) || UserType.UNLOAD_SITE.equals(userTypeTrim);
+        boolean isCustomer = UserType.CUSTOMER.equals(userTypeTrim) ||
+                UserType.VISITOR_CUSTOMER_P.equals(userTypeTrim) ||
+                UserType.VISITOR_CUSTOMER_U.equals(userTypeTrim) ||
+                UserType.LOAD_SITE.equals(userTypeTrim) ||
+                UserType.UNLOAD_SITE.equals(userTypeTrim) ||
+                UserType.FARMERS.equals(userTypeTrim);
         if (isCustomer) {
             if (LOGIN_NAME.equals(loginType)) {
                 userInfo = customerUserMapper.getByLoginName(parseKey(map));
                 if (userInfo != null) {
-                    userInfo = this.differentiateCustomer(userInfo);
+                    userInfo = this.updateUserInfoBusinessType(this.updateUserInfoUserType(userInfo));
                 }
             }
             if (PHONE_NUMBER.equals(loginType)) {
                 userInfo = customerUserMapper.getByPhoneNumber(parseKey(map));
                 if (userInfo != null) {
-                    userInfo = this.differentiateCustomer(userInfo);
+                    userInfo = this.updateUserInfoBusinessType(this.updateUserInfoUserType(userInfo));
                 } else {
                     userInfo = this.getCustomerRegisterPurpose(map);
                 }
@@ -85,35 +91,38 @@ public class UserServiceImpl implements UserService {
             if (ID.equals(loginType)) {
                 userInfo = customerUserMapper.getUserInfoById(parseKey(map));
                 if (userInfo != null) {
-                    userInfo = this.differentiateCustomer(userInfo);
+                    userInfo = this.updateUserInfoBusinessType(this.updateUserInfoUserType(userInfo));
                 } else {
+                    //游客暂不支持tenant，但是稍后需要调整游客表并加入tenantId
                     userInfo = this.getCustomerRegisterPurpose(map);
                 }
             }
         }
         if (UserType.EMPLOYEE.equals(userTypeTrim)) {
             if (LOGIN_NAME.equals(loginType)) {
-                userInfo = employeeMapper.getByLoginName(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(employeeMapper.getByLoginName(parseKey(map)));
             }
             if (PHONE_NUMBER.equals(loginType)) {
-                userInfo = employeeMapper.getByPhone(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(employeeMapper.getByPhone(parseKey(map)));
             }
             if (ID.equals(loginType)) {
-                userInfo = employeeMapper.getUserInfoById(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(employeeMapper.getUserInfoById(parseKey(map)));
             }
         }
-        if (UserType.DRIVER.equals(userTypeTrim) || UserType.VISITOR_DRIVER_P.equals(userTypeTrim) || UserType.VISITOR_DRIVER_U.equals(userTypeTrim)) {
+        if (UserType.DRIVER.equals(userTypeTrim) ||
+                UserType.VISITOR_DRIVER_P.equals(userTypeTrim) ||
+                UserType.VISITOR_DRIVER_U.equals(userTypeTrim)) {
             if (LOGIN_NAME.equals(loginType)) {
-                userInfo = driverMapper.getByLoginName(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(driverMapper.getByLoginName(parseKey(map)));
             }
             if (PHONE_NUMBER.equals(loginType)) {
-                userInfo = driverMapper.getByPhoneNumber(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(driverMapper.getByPhoneNumber(parseKey(map)));
                 if (null == userInfo) {
                     userInfo = this.getSocialDriverRegisterPurpose(map);
                 }
             }
             if (ID.equals(loginType)) {
-                userInfo = driverMapper.getUserInfoById(parseKey(map));
+                userInfo = this.updateUserInfoBusinessType(driverMapper.getUserInfoById(parseKey(map)));
                 if (null == userInfo) {
                     userInfo = this.getSocialDriverRegisterPurpose(map);
                 }
@@ -244,19 +253,45 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    private UserInfo differentiateCustomer(UserInfo userInfo) {
-        if (userInfo != null){
-            // CUSTOMER
-            if (CustomerType.CUSTOMER.toString().equals(userInfo.getUserType())) {
-                userInfo.setUserType(UserType.CUSTOMER);
-            }else if(CustomerType.LOAD_SITE.toString().equals(userInfo.getUserType())){
-                userInfo.setUserType(UserType.LOAD_SITE);
-            }else{
-                userInfo.setUserType(UserType.UNLOAD_SITE);
-            }
+    /**
+     * 填充UserInfo的 UserTyp 字段，适用于user 客户域
+     *
+     * @param userInfo
+     * @return
+     */
+    private UserInfo updateUserInfoUserType(UserInfo userInfo) {
+        if (null == userInfo) {
+            return null;
+        }
+        if (CustomerType.CUSTOMER.toString().equals(userInfo.getUserType())) {
+            userInfo.setUserType(UserType.CUSTOMER);
+        } else if (CustomerType.LOAD_SITE.toString().equals(userInfo.getUserType())) {
+            userInfo.setUserType(UserType.LOAD_SITE);
+        } else if (CustomerType.UNLOAD_SITE.toString().equals(userInfo.getUserType())) {
+            userInfo.setUserType(UserType.UNLOAD_SITE);
+        } else if (CustomerType.FARMERS.toString().equals(userInfo.getUserType())) {
+            userInfo.setUserType(UserType.FARMERS);
+        }
+        return userInfo;
+    }
+
+    /**
+     * 填充userInfo的 BusinessType 字段， 适用于user 全局
+     *
+     * @param userInfo
+     * @return
+     */
+    private UserInfo updateUserInfoBusinessType(UserInfo userInfo) {
+        if (null == userInfo) {
+            return null;
+        }
+        BaseResponse<GetTenantDto> baseResponse = crmClientService.getTenantById(userInfo.getTenantId());
+        GetTenantDto tenantDto = baseResponse.getData();
+        if (null == tenantDto) {
             return userInfo;
         }
-        return null;
+        userInfo.setBusinessType(tenantDto.getTenantType());
+        return userInfo;
     }
 
     /**

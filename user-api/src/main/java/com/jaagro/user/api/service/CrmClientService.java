@@ -1,5 +1,6 @@
 package com.jaagro.user.api.service;
 
+import com.jaagro.user.api.dto.GetTenantDto;
 import com.jaagro.user.api.dto.base.ShowCustomerDto;
 import com.jaagro.user.api.dto.base.ShowSiteDto;
 import com.jaagro.user.api.dto.response.CustomerRegisterPurposeDto;
@@ -69,4 +70,12 @@ public interface CrmClientService {
      */
     @GetMapping("/getShowSite/{id}")
     ShowSiteDto getShowSiteById(@PathVariable("id") Integer id);
+
+    /**
+     * 获取当前tenant对象详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/getTenantById/{id}")
+    BaseResponse<GetTenantDto> getTenantById(@PathVariable("id") int id);
 }
