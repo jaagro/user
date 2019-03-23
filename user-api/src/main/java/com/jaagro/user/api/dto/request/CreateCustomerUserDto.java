@@ -1,18 +1,19 @@
-package com.jaagro.user.biz.entity;
+package com.jaagro.user.api.dto.request;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
+
+/**
+ * @author baiyiran
+ * @date 2019.3.23
+ */
 @Data
 @Accessors(chain = true)
-public class CustomerUser {
-    /**
-     * 用户ID
-     */
-    private Integer id;
-
+public class CreateCustomerUserDto implements Serializable {
     /**
      *
      */
@@ -79,17 +80,7 @@ public class CustomerUser {
     private Integer createUserId;
 
     /**
-     * 修改人
-     */
-    private Integer modifyUserId;
-
-    /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date modifyTime;
 }

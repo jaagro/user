@@ -1,12 +1,17 @@
 package com.jaagro.user.biz.service.impl;
 
+import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.user.biz.entity.CustomerUser;
 import com.jaagro.user.biz.mapper.CustomerUserMapperExt;
+import com.jaagro.utils.BaseResponse;
+import com.jaagro.utils.ServiceResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @author tony
@@ -58,10 +63,31 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         return convertToDto(customerUser);
     }
 
-    private GetCustomerUserDto convertToDto(CustomerUser customerUser){
-        if (customerUser != null){
+    /**
+     * 创建customerUser
+     *
+     * @param userDto
+     * @return
+     */
+    @Override
+    public Map<String, Object> createCustomerUser(CreateCustomerUserDto userDto) {
+        CustomerUser customerUser = new CustomerUser();
+        BeanUtils.copyProperties(userDto, customerUser);
+        customerUser
+                .setSalt("42850")
+                .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
+        int result = customerUserMapperExt.insertSelective(customerUser);
+        if (result > 0) {
+            return ServiceResult.toResult("操作成功");
+        } else {
+            return ServiceResult.error("操作失败");
+        }
+    }
+
+    private GetCustomerUserDto convertToDto(CustomerUser customerUser) {
+        if (customerUser != null) {
             GetCustomerUserDto customerUserReturnDto = new GetCustomerUserDto();
-            BeanUtils.copyProperties(customerUser,customerUserReturnDto);
+            BeanUtils.copyProperties(customerUser, customerUserReturnDto);
             return customerUserReturnDto;
         }
         return null;
