@@ -1,5 +1,6 @@
 package com.jaagro.user.biz.service.impl;
 
+import com.jaagro.constant.UserInfo;
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
@@ -73,6 +74,11 @@ public class CustomerUserServiceImpl implements CustomerUserService {
     public Map<String, Object> createCustomerUser(CreateCustomerUserDto userDto) {
         CustomerUser customerUser = new CustomerUser();
         BeanUtils.copyProperties(userDto, customerUser);
+        //判断手机号是否已存在
+        UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUser.getPhoneNumber());
+        if (userInfo != null) {
+            return ServiceResult.error("手机号重复");
+        }
         customerUser
                 .setSalt("42850")
                 .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
