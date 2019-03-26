@@ -31,7 +31,7 @@
         <result column="phone" property="phoneNumber" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Info_Column">
-        id, login_name, password, phone, salt, status, name, department_id
+        id, login_name, password, phone, salt, status, name, department_id, tenant_id
     </sql>
     <sql id="Return_List">
         id, name, phone

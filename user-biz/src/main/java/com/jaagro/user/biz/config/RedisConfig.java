@@ -26,7 +26,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 缓存过期时间
      */
     @Value("${cache.expiration}")
-    private long cacheExpiration;
+    private long cacheExpiration = 86400;
 
     /**
      * 定义缓存数据 key 生成策略的bean 包名+类名+方法名+所有参数

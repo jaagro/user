@@ -3,7 +3,7 @@
 <mapper namespace="com.jaagro.user.biz.mapper.DriverMapperExt">
 
     <sql id="Info_Column">
-        id, login_name, password, phone_number, salt, status, name
+        id, login_name, password, phone_number, salt, status, name, tenant_id
   </sql>
     <update id="deleteDriverLogic">
     update driver

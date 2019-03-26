@@ -3,19 +3,20 @@ package com.jaagro.user.biz.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author liqiangping
- */
 @Data
 @Accessors(chain = true)
-public class Employee implements Serializable {
+public class Employee {
     /**
      * 员工表自增
      */
     private Integer id;
+
+    /**
+     * 
+     */
+    private Integer tenantId;
 
     /**
      * 员工姓名
@@ -48,6 +49,11 @@ public class Employee implements Serializable {
     private String salt;
 
     /**
+     * 帐号状态(0；未审核  1；审核未通过 2－停止合作，3－正常合作)
+     */
+    private Integer status;
+
+    /**
      * 邮箱
      */
     private String email;
@@ -68,7 +74,7 @@ public class Employee implements Serializable {
     private String notes;
 
     /**
-     * 性别
+     * 性别 0：男1：女
      */
     private Integer gender;
 
@@ -91,10 +97,5 @@ public class Employee implements Serializable {
      * 修改人
      */
     private Integer modifyUserId;
-
-    /**
-     * 帐号状态(0；未审核  1；审核未通过 2－停止合作，3－正常合作)
-     */
-    private Integer status;
 
 }
