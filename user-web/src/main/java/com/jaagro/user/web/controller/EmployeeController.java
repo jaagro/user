@@ -338,4 +338,16 @@ public class EmployeeController {
         }
         return BaseResponse.successInstance(listEmployeeDtoList);
     }
+
+    /**
+     * 获取技术员列表
+     *
+     * @return
+     * @author yj
+     */
+    @ApiOperation("获取技术员列表")
+    @GetMapping("/listTechnician/{employeeId}")
+    public BaseResponse<ListEmployeeDto> getTechnicianById(@PathVariable("employeeId") Integer employeeId) {
+        return BaseResponse.successInstance(employeeMapper.getTechnicianById(employeeId));
+    }
 }
