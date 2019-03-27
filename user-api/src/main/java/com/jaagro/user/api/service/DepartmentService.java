@@ -80,15 +80,18 @@ public interface DepartmentService {
      * @return
      */
     Map<String, Object> getDownDepartmentByCurrentUser();
+
     /**
      * 获取所有部门 供其它系统使用
-     * @Author gavin 20181203
+     *
      * @return
+     * @Author gavin 20181203
      */
-     List<DepartmentReturnDto> getAllDepartments();
+    List<DepartmentReturnDto> getAllDepartments();
 
     /**
      * 获取网点部门
+     *
      * @param netpoint
      * @return
      */
@@ -96,8 +99,16 @@ public interface DepartmentService {
 
     /**
      * 获取用户所在部门
+     *
      * @param userIds
      * @return
      */
     List<DepartmentReturnDto> listDepartmentByUserId(int[] userIds);
+
+    /**
+     * 获取大区id列表
+     *
+     * @return
+     */
+    List<Integer> listRegionDepartmentIds();
 }

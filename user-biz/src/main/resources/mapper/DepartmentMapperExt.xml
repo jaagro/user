@@ -109,4 +109,13 @@
         from department
         where enabled = 1 and id in(#{ids})
     </select>
+    <select id="listRegionDepartmentIds" resultType="java.lang.Integer">
+        SELECT
+            id
+        FROM
+            department
+        WHERE
+            <![CDATA[ (department_name like concat('%',"大区") )]]>
+            AND enabled = 1
+    </select>
 </mapper>

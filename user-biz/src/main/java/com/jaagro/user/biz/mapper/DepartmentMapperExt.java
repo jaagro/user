@@ -37,10 +37,12 @@ public interface DepartmentMapperExt extends DepartmentMapper {
 
     /**
      * 查询网点
+     *
      * @param netpoint
      * @return
      */
     List<ListDepartmentDto> listNetPointDepartment(@Param("netpoint") Boolean netpoint);
+
     /**
      * 查询当前用户的本部门及以下的部门列表树
      *
@@ -66,15 +68,24 @@ public interface DepartmentMapperExt extends DepartmentMapper {
 
     /**
      * 获取所有部门 供其它系统使用
-     * @Author gavin 20181203
+     *
      * @return
+     * @Author gavin 20181203
      */
     List<DepartmentReturnDto> getAllDepartments();
 
     /**
      * 批量通过userId获取dept
+     *
      * @param ids
      * @return
      */
     List<DepartmentReturnDto> listDepartmentByIdList(String ids);
+
+    /**
+     * 获取大区id列表
+     *
+     * @return
+     */
+    List<Integer> listRegionDepartmentIds();
 }

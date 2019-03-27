@@ -166,17 +166,17 @@ public class DepartmentController {
 
     @ApiOperation("查询网点部门")
     @PostMapping("/listNetPointDepartment")
-    public List<Map<String,String>> listNetPointDepartment(@RequestParam(required = false) Boolean netpoint) {
-        List<Map<String,String>> mapList = new ArrayList<>();
+    public List<Map<String, String>> listNetPointDepartment(@RequestParam(required = false) Boolean netpoint) {
+        List<Map<String, String>> mapList = new ArrayList<>();
         List<ListDepartmentDto> deptDtos = departmentService.listNetPointDepartment(netpoint);
         for (ListDepartmentDto deptDto : deptDtos) {
-            Map<String,String> map = new HashMap<>();
-            map.put("id",deptDto.getId().toString());
-            map.put("departmentName",deptDto.getDepartmentName());
+            Map<String, String> map = new HashMap<>();
+            map.put("id", deptDto.getId().toString());
+            map.put("departmentName", deptDto.getDepartmentName());
             mapList.add(map);
         }
 
-        return  mapList;
+        return mapList;
     }
 
     @PostMapping("/getDownDepartment")
@@ -220,10 +220,24 @@ public class DepartmentController {
 
     /**
      * 批量获取部门
+     *
      * @param ids
      * @return
      */
-    public BaseResponse<List<DepartmentReturnDto>> listDepartmentByIdList(int[] ids){
+    public BaseResponse<List<DepartmentReturnDto>> listDepartmentByIdList(int[] ids) {
         return BaseResponse.successInstance(departmentService.listDepartmentByUserId(ids));
+    }
+
+    /**
+     * 获取全部大区id
+     *
+     * @return
+     * @Author byr
+     */
+    @ApiOperation("获取全部大区id")
+    @GetMapping("/listRegionDepartmentIds")
+    @Ignore
+    public List<Integer> listRegionDepartmentIds() {
+        return departmentService.listRegionDepartmentIds();
     }
 }
