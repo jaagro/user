@@ -246,7 +246,6 @@ public class DepartmentController {
      *
      * @return
      */
-    @Ignore
     @ApiOperation("获取指定部门的下属部门")
     @GetMapping("/getDownDeptIdsByDeptId/{deptId}")
     public List<Integer> getDownDeptIdsByDeptId(@PathVariable("deptId") Integer deptId) {
