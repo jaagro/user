@@ -111,4 +111,12 @@ public interface DepartmentService {
      * @return
      */
     List<Integer> listRegionDepartmentIds();
+
+    /**
+     * 查询指定部门的下属部门
+     *
+     * @param deptId
+     * @return
+     */
+    List<Integer> getDownDeptIdsByDeptId(Integer deptId);
 }
