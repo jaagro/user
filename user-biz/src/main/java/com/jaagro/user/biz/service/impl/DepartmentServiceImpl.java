@@ -322,7 +322,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<Integer> deptIds = departmentMapper.getDownDepartmentId(did);
         if (deptIds.size() != 0) {
             for (Integer deptId : deptIds) {
-                departmentRecursion2(deptResultSet, deptId);
+                departmentRecursion(deptResultSet, deptId);
             }
         }
         log.info("指定部门的下属id： " + deptResultSet);
