@@ -210,6 +210,33 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
+     * 获取大区id列表
+     *
+     * @return
+     */
+    @Override
+    public List<Integer> listRegionDepartmentIds() {
+        return departmentMapper.listRegionDepartmentIds();
+    }
+
+    /**
+     * 查询指定部门的下属部门
+     *
+     * @param deptId
+     * @return
+     */
+    @Override
+    public List<Integer> getDownDeptIdsByDeptId(Integer deptId) {
+        Set<Integer> deptIdSet = new LinkedHashSet<>();
+        Set<Integer> set = departmentRecursion2(deptIdSet, deptId);
+        if (CollectionUtils.isEmpty(set)) {
+            return null;
+        } else {
+            return new ArrayList<>(set);
+        }
+    }
+
+    /**
      * 获取下级部门的数组
      * 用于系统的数据隔离使用
      *
@@ -287,6 +314,18 @@ public class DepartmentServiceImpl implements DepartmentService {
             }
         }
         log.info("当前用户可查询的部门id： " + deptResultSet);
+        return deptResultSet;
+    }
+
+    private Set<Integer> departmentRecursion2(Set<Integer> deptResultSet, Integer did) {
+        //找到所有第一层子部门列表
+        List<Integer> deptIds = departmentMapper.getDownDepartmentId(did);
+        if (deptIds.size() != 0) {
+            for (Integer deptId : deptIds) {
+                departmentRecursion(deptResultSet, deptId);
+            }
+        }
+        log.info("指定部门的下属id： " + deptResultSet);
         return deptResultSet;
     }
 

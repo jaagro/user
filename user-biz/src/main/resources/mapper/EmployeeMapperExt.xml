@@ -128,4 +128,19 @@
             e. STATUS != 3
         AND r.name = '技术员'
     </select>
+    <select id="getTechnicianById" resultMap="ReturnMap" parameterType="java.lang.Integer">
+        SELECT
+            e.id,
+            e.name,
+            e.phone
+        FROM
+            employee e
+        LEFT JOIN employee_role er ON e.id = er.employee_id
+        LEFT JOIN role r ON er.role_id = r.id
+        WHERE
+            e. STATUS != 3
+        AND r.name = '技术员'
+        AND e.id=#{employeeId}
+    </select>
+
 </mapper>
