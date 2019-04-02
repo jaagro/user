@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,8 +68,26 @@ public class CustomerUserController {
         }
         Map<String, Object> resultMap;
         try {
-
             resultMap = customerUserService.createCustomerUser(userDto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return BaseResponse.errorInstance(ex.getMessage());
+        }
+        return BaseResponse.service(resultMap);
+    }
+
+    /**
+     * 修改养殖户app登录用户
+     *
+     * @param createCustomerUserDtoList
+     * @return
+     */
+    @Ignore
+    @PostMapping("/editCustomerUser")
+    public BaseResponse editCustomerUser(@RequestBody List<CreateCustomerUserDto> createCustomerUserDtoList) {
+        Map<String, Object> resultMap;
+        try {
+            resultMap = customerUserService.updateCustomerUser(createCustomerUserDtoList);
         } catch (Exception ex) {
             ex.printStackTrace();
             return BaseResponse.errorInstance(ex.getMessage());
