@@ -3,7 +3,6 @@ package com.jaagro.user.api.service;
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,12 +41,4 @@ public interface CustomerUserService {
      * @return
      */
     Map<String, Object> createCustomerUser(CreateCustomerUserDto userDto);
-
-    /**
-     * 修改 养殖账号电话
-     *
-     * @param createCustomerUserDtoList
-     * @return
-     */
-    Map<String, Object> updateCustomerUser(List<CreateCustomerUserDto> createCustomerUserDtoList);
 }

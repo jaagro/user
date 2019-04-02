@@ -76,12 +76,10 @@ public class CustomerUserServiceImpl implements CustomerUserService {
      */
     @Override
     public Map<String, Object> createCustomerUser(CreateCustomerUserDto userDto) {
+        //先删除
+        customerUserMapperExt.deleteByCustomerId(userDto.getRelevanceId());
         CustomerUser customerUser = new CustomerUser();
         BeanUtils.copyProperties(userDto, customerUser);
-        return createCustomer(customerUser);
-    }
-
-    private Map<String, Object> createCustomer(CustomerUser customerUser) {
         //判断手机号是否已存在
         UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUser.getPhoneNumber());
         if (userInfo != null) {
@@ -96,39 +94,6 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         } else {
             return ServiceResult.error("操作失败");
         }
-    }
-
-    /**
-     * 修改 养殖账号电话
-     *
-     * @param createCustomerUserDtoList
-     * @return
-     */
-    @Override
-    public Map<String, Object> updateCustomerUser(List<CreateCustomerUserDto> createCustomerUserDtoList) {
-        if (!CollectionUtils.isEmpty(createCustomerUserDtoList)) {
-            //先删除
-            customerUserMapperExt.deleteByCustomerId(createCustomerUserDtoList.get(0).getRelevanceId());
-            //新增
-            for (CreateCustomerUserDto userDto : createCustomerUserDtoList) {
-                CustomerUser customerUser = new CustomerUser();
-                BeanUtils.copyProperties(userDto, customerUser);
-                if (StringUtils.isEmpty(userDto.getPhoneNumber())) {
-                    return ServiceResult.error("联系电话不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getCustomerType())) {
-                    return ServiceResult.error("养殖户类型不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getRelevanceId())) {
-                    return ServiceResult.error("关联id不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getTenantId())) {
-                    return ServiceResult.error("tenantId不能为空");
-                }
-                createCustomer(customerUser);
-            }
-        }
-        return null;
     }
 
     private GetCustomerUserDto convertToDto(CustomerUser customerUser) {
