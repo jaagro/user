@@ -37,6 +37,7 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
 
     /**
      * id列表获取userInfo列表
+     *
      * @param userIdList
      * @return
      */
@@ -44,6 +45,7 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
 
     /**
      * 获取单条有效客户user
+     *
      * @param id
      * @return
      */
@@ -51,6 +53,7 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
 
     /**
      * 根据手机号查询
+     *
      * @param phoneNumber
      * @return
      */
@@ -58,8 +61,17 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
 
     /**
      * 根据关联客户id查询
+     *
      * @param relevanceId
      * @return
      */
     CustomerUser selectByRelevanceId(Integer relevanceId);
+
+    /**
+     * 根据关联id删除
+     *
+     * @param relevanceId
+     * @return
+     */
+    int deleteByCustomerId(@Param("relevanceId") Integer relevanceId);
 }
