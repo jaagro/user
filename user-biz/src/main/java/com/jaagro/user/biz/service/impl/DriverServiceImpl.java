@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -117,7 +116,6 @@ public class DriverServiceImpl implements DriverService {
      * @return
      */
 //    @CacheEvict(cacheNames = "driver", allEntries = true)
-    @CacheEvict(cacheNames = "truck", allEntries = true)
     @Override
     public Map<String, Object> updateDriverRegIdByPhoneNumber(UpdateDriverDto driver) {
         if (driver.getPhoneNumber() == null) {
