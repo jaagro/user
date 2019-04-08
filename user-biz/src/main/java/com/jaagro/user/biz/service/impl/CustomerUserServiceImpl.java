@@ -2,6 +2,7 @@ package com.jaagro.user.biz.service.impl;
 
 import com.jaagro.constant.UserInfo;
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
+import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.user.biz.entity.CustomerUser;
@@ -75,38 +76,67 @@ public class CustomerUserServiceImpl implements CustomerUserService {
      * @return
      */
     @Override
-    public Map<String, Object> createCustomerUser(List<CreateCustomerUserDto> userDtoList) {
-        if (!CollectionUtils.isEmpty(userDtoList)) {
-            //先删除
-            customerUserMapperExt.deleteByCustomerId(userDtoList.get(0).getRelevanceId());
-            for (CreateCustomerUserDto userDto : userDtoList) {
-                if (StringUtils.isEmpty(userDto.getPhoneNumber())) {
-                    return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "联系电话不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getCustomerType())) {
-                    return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖户类型不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getRelevanceId())) {
-                    return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "关联id不能为空");
-                }
-                if (StringUtils.isEmpty(userDto.getTenantId())) {
-                    return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "tenantId不能为空");
-                }
-                CustomerUser customerUser = new CustomerUser();
-                BeanUtils.copyProperties(userDto, customerUser);
-                //判断手机号是否已存在
-                UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUser.getPhoneNumber());
-                if (userInfo != null) {
-                    return ServiceResult.error("手机号重复");
-                }
-                customerUser
-                        .setSalt("42850")
-                        .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
-                customerUserMapperExt.insertSelective(customerUser);
-            }
-            return ServiceResult.toResult("操作成功");
+    public Map<String, Object> createCustomerUser(CreateCustomerUserDto customerUserDto) {
+        if (StringUtils.isEmpty(customerUserDto.getPhoneNumber())) {
+            return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "联系电话不能为空");
         }
-        return ServiceResult.error("联系人登录用户操作失败");
+        if (StringUtils.isEmpty(customerUserDto.getCustomerType())) {
+            return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖户类型不能为空");
+        }
+        if (StringUtils.isEmpty(customerUserDto.getRelevanceId())) {
+            return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "关联id不能为空");
+        }
+        if (StringUtils.isEmpty(customerUserDto.getTenantId())) {
+            return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "tenantId不能为空");
+        }
+        CustomerUser customerUser = new CustomerUser();
+        BeanUtils.copyProperties(customerUserDto, customerUser);
+        //判断手机号是否已存在
+        UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUser.getPhoneNumber());
+        if (userInfo != null) {
+            return ServiceResult.error("手机号重复");
+        }
+        customerUser
+                .setSalt("42850")
+                .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
+        customerUserMapperExt.insertSelective(customerUser);
+        return ServiceResult.toResult("操作成功");
+    }
+
+    /**
+     * 修改
+     *
+     * @param customerUserDto
+     * @return
+     */
+    @Override
+    public Map<String, Object> updateCustomerUser(UpdateCustomerUserDto customerUserDto) {
+        //判断手机号是否已存在
+        UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUserDto.getPhoneNumber());
+        if (userInfo != null) {
+            return ServiceResult.error("手机号重复");
+        }
+        CustomerUser customerUser = customerUserMapperExt.selectByStandbyId(customerUserDto.getStandbyId());
+        if (customerUser == null) {
+            return ServiceResult.error("账号不存在");
+        }
+        CustomerUser user = new CustomerUser();
+        BeanUtils.copyProperties(customerUserDto, user);
+        user.setId(customerUser.getId());
+        customerUserMapperExt.updateByPrimaryKeySelective(user);
+        return ServiceResult.toResult("修改成功");
+    }
+
+    /**
+     * 根据联系人id删除登录账号
+     *
+     * @param standbyId
+     * @return
+     */
+    @Override
+    public Map<String, Object> deleteByStandbyId(Integer standbyId) {
+        customerUserMapperExt.deleteByStandbyId(standbyId);
+        return ServiceResult.toResult("删除成功");
     }
 
     private GetCustomerUserDto convertToDto(CustomerUser customerUser) {

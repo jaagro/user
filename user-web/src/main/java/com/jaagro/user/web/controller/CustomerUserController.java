@@ -1,14 +1,15 @@
 package com.jaagro.user.web.controller;
 
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
+import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.utils.BaseResponse;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,20 +47,54 @@ public class CustomerUserController {
     /**
      * 新增养殖户app登录用户
      *
-     * @param userDto
+     * @param customerUserDto
      * @return
      */
     @Ignore
     @PostMapping("/customerUser")
-    public BaseResponse createCustomerUser(@RequestBody List<CreateCustomerUserDto> userDto) {
+    public BaseResponse createCustomerUser(@RequestBody CreateCustomerUserDto customerUserDto) {
         Map<String, Object> resultMap;
         try {
-            resultMap = customerUserService.createCustomerUser(userDto);
+            resultMap = customerUserService.createCustomerUser(customerUserDto);
         } catch (Exception ex) {
             ex.printStackTrace();
             return BaseResponse.errorInstance(ex.getMessage());
         }
         return BaseResponse.service(resultMap);
+    }
+
+    /**
+     * 修改养殖户app登录用户
+     *
+     * @param customerUserDto
+     * @return
+     */
+    @Ignore
+    @PostMapping("/updateCustomerUser")
+    public BaseResponse updateCustomerUser(@RequestBody UpdateCustomerUserDto customerUserDto) {
+        if (StringUtils.isEmpty(customerUserDto.getStandbyId())) {
+            return BaseResponse.errorInstance("联系人id不能为空");
+        }
+        Map<String, Object> resultMap;
+        try {
+            resultMap = customerUserService.updateCustomerUser(customerUserDto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return BaseResponse.errorInstance(ex.getMessage());
+        }
+        return BaseResponse.service(resultMap);
+    }
+
+    /**
+     * 根据联系人id删除登录账号
+     *
+     * @param standbyId
+     * @return
+     */
+    @Ignore
+    @GetMapping("/deleteByStandbyId/{standbyId}")
+    public BaseResponse deleteByStandbyId(@PathVariable("standbyId") Integer standbyId) {
+        return BaseResponse.service(customerUserService.deleteByStandbyId(standbyId));
     }
 
 }

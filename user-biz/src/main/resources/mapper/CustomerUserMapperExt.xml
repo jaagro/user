@@ -60,4 +60,13 @@
         relevance_id = #{relevanceId}
         AND tenant_id = 2
   </delete>
+    <select id="selectByStandbyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer_user
+        WHERE where standby_id = #{standbyId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByStandbyId" parameterType="java.lang.Integer">
+        DELETE FROM customer_user WHERE standby_id = #{standbyId} and tenant_id = 2
+    </delete>
 </mapper>
