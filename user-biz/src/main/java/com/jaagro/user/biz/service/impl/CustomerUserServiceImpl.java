@@ -71,7 +71,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
     /**
      * 创建customerUser
      *
-     * @param userDto
+     * @param userDtoList
      * @return
      */
     @Override
@@ -104,8 +104,9 @@ public class CustomerUserServiceImpl implements CustomerUserService {
                         .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
                 customerUserMapperExt.insertSelective(customerUser);
             }
+            return ServiceResult.toResult("操作成功");
         }
-        return ServiceResult.error("操作失败");
+        return ServiceResult.error("联系人登录用户操作失败");
     }
 
     private GetCustomerUserDto convertToDto(CustomerUser customerUser) {
