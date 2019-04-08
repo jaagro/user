@@ -89,9 +89,6 @@ public class CustomerUserServiceImpl implements CustomerUserService {
                 if (StringUtils.isEmpty(userDto.getRelevanceId())) {
                     return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "关联id不能为空");
                 }
-                if (StringUtils.isEmpty(userDto.getTenantId())) {
-                    return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "tenantId不能为空");
-                }
                 CustomerUser customerUser = new CustomerUser();
                 BeanUtils.copyProperties(userDto, customerUser);
                 //判断手机号是否已存在
@@ -105,7 +102,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
                 customerUserMapperExt.insertSelective(customerUser);
             }
         }
-        return ServiceResult.error("操作失败");
+        return ServiceResult.toResult("操作成功");
     }
 
     private GetCustomerUserDto convertToDto(CustomerUser customerUser) {
