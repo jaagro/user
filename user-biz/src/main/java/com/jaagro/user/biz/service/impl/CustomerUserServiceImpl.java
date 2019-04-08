@@ -71,7 +71,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
     /**
      * 创建customerUser
      *
-     * @param userDto
+     * @param userDtoList
      * @return
      */
     @Override
