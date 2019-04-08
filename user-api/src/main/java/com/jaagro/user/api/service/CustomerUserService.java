@@ -3,6 +3,7 @@ package com.jaagro.user.api.service;
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,5 +41,5 @@ public interface CustomerUserService {
      * @param userDto
      * @return
      */
-    Map<String, Object> createCustomerUser(CreateCustomerUserDto userDto);
+    Map<String, Object> createCustomerUser(List<CreateCustomerUserDto> userDto);
 }

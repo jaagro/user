@@ -4,12 +4,11 @@ import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.utils.BaseResponse;
-import com.jaagro.utils.ResponseStatusCode;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,22 +51,9 @@ public class CustomerUserController {
      */
     @Ignore
     @PostMapping("/customerUser")
-    public BaseResponse createCustomerUser(@RequestBody CreateCustomerUserDto userDto) {
-        if (StringUtils.isEmpty(userDto.getPhoneNumber())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "联系电话不能为空");
-        }
-        if (StringUtils.isEmpty(userDto.getCustomerType())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖户类型不能为空");
-        }
-        if (StringUtils.isEmpty(userDto.getRelevanceId())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "关联id不能为空");
-        }
-        if (StringUtils.isEmpty(userDto.getTenantId())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "tenantId不能为空");
-        }
+    public BaseResponse createCustomerUser(@RequestBody List<CreateCustomerUserDto> userDto) {
         Map<String, Object> resultMap;
         try {
-
             resultMap = customerUserService.createCustomerUser(userDto);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -75,4 +61,5 @@ public class CustomerUserController {
         }
         return BaseResponse.service(resultMap);
     }
+
 }
