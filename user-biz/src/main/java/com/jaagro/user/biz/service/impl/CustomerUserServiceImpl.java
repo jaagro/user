@@ -102,10 +102,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
                 customerUser
                         .setSalt("42850")
                         .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
-                int result = customerUserMapperExt.insertSelective(customerUser);
-                if (result < 1) {
-                    return ServiceResult.error("操作失败");
-                }
+                customerUserMapperExt.insertSelective(customerUser);
             }
         }
         return ServiceResult.error("操作失败");
