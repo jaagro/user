@@ -64,7 +64,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM customer_user
-        WHERE where standby_id = #{standbyId,jdbcType=INTEGER}
+        WHERE standby_id = #{standbyId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByStandbyId" parameterType="java.lang.Integer">
         DELETE FROM customer_user WHERE standby_id = #{standbyId} and tenant_id = 2
