@@ -118,7 +118,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         }
         CustomerUser customerUser = customerUserMapperExt.selectByStandbyId(customerUserDto.getStandbyId());
         if (customerUser == null) {
-            return ServiceResult.error("账号不存在");
+            return ServiceResult.error(customerUserDto.getStandbyId()+"账号不存在");
         }
         CustomerUser user = new CustomerUser();
         BeanUtils.copyProperties(customerUserDto, user);

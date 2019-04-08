@@ -30,6 +30,11 @@ public class CreateCustomerUserDto implements Serializable {
     private Integer relevanceId;
 
     /**
+     * 备用id，当relevance_id不够使用时用于扩展字段
+     */
+    private Integer standbyId;
+
+    /**
      * 登录用户名(默认使用手机号码)
      */
     private String loginName;
