@@ -344,7 +344,6 @@ public class EmployeeController {
      *
      * @return
      * @author yj
-     *
      */
     @ApiOperation("获取技术员列表")
     @GetMapping("/getTechnician/{employeeId}")

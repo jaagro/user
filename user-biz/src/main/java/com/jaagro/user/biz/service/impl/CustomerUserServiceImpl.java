@@ -111,9 +111,11 @@ public class CustomerUserServiceImpl implements CustomerUserService {
      */
     @Override
     public Map<String, Object> updateCustomerUser(UpdateCustomerUserDto customerUserDto) {
+        CustomerUser user = new CustomerUser();
+        BeanUtils.copyProperties(customerUserDto, user);
         //判断手机号是否已存在
-        UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUserDto.getPhoneNumber());
-        if (userInfo != null) {
+        CustomerUser notStandbyId = customerUserMapperExt.selectByPhoneNotStandbyId(user);
+        if (notStandbyId != null) {
             return ServiceResult.error("手机号重复");
         }
         CustomerUser customerUser = customerUserMapperExt.selectByStandbyId(customerUserDto.getStandbyId());
