@@ -122,10 +122,10 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         if (customerUser == null) {
             return ServiceResult.error(customerUserDto.getStandbyId() + "账号不存在");
         }
-        CustomerUser user = new CustomerUser();
-        BeanUtils.copyProperties(customerUserDto, user);
-        user.setId(customerUser.getId());
-        customerUserMapperExt.updateByPrimaryKeySelective(user);
+        CustomerUser user1 = new CustomerUser();
+        BeanUtils.copyProperties(customerUserDto, user1);
+        user1.setId(customerUser.getId());
+        customerUserMapperExt.updateByPrimaryKeySelective(user1);
         return ServiceResult.toResult("修改成功");
     }
 
