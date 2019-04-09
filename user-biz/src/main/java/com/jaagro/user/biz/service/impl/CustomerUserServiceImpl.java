@@ -92,8 +92,8 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         CustomerUser customerUser = new CustomerUser();
         BeanUtils.copyProperties(customerUserDto, customerUser);
         //判断手机号是否已存在
-        UserInfo userInfo = customerUserMapperExt.getByPhoneNumber(customerUser.getPhoneNumber());
-        if (userInfo != null) {
+        CustomerUser user = customerUserMapperExt.selectByPhoneNotStandbyId(customerUser);
+        if (user != null) {
             return ServiceResult.error("手机号重复");
         }
         customerUser
@@ -118,7 +118,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         }
         CustomerUser customerUser = customerUserMapperExt.selectByStandbyId(customerUserDto.getStandbyId());
         if (customerUser == null) {
-            return ServiceResult.error(customerUserDto.getStandbyId()+"账号不存在");
+            return ServiceResult.error(customerUserDto.getStandbyId() + "账号不存在");
         }
         CustomerUser user = new CustomerUser();
         BeanUtils.copyProperties(customerUserDto, user);

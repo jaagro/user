@@ -90,4 +90,13 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
      * @return
      */
     int deleteByStandbyId(@Param("standbyId") Integer standbyId);
+
+    /**
+     * 根据手机号查询
+     * 如果是新增 查询不包括当前id的
+     *
+     * @param customerUser
+     * @return
+     */
+    CustomerUser selectByPhoneNotStandbyId(CustomerUser customerUser);
 }
