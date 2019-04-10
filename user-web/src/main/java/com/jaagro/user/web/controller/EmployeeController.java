@@ -7,6 +7,7 @@ import com.jaagro.user.api.dto.request.ListEmpCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateEmpDto;
 import com.jaagro.user.api.dto.response.GetRoleDto;
 import com.jaagro.user.api.dto.response.employee.DeleteEmployeeDto;
+import com.jaagro.user.api.dto.response.employee.EmployeeAndRoleDto;
 import com.jaagro.user.api.dto.response.employee.ListEmployeeDto;
 import com.jaagro.user.api.service.EmployeeRoleService;
 import com.jaagro.user.api.service.EmployeeService;
@@ -313,6 +314,12 @@ public class EmployeeController {
         return BaseResponse.successInstance(this.employeeMapper.listEmployee());
     }
 
+    /**
+     * 查询员工拥有的角色
+     * @param employeeId
+     * @return
+     */
+    @ApiOperation("获取员工对应的角色列表")
     @GetMapping("/listRoleByEmployeeId/{employeeId}")
     public BaseResponse<List<GetRoleDto>> listRoleByEmployeeId(@PathVariable("employeeId") Integer employeeId) {
         List<GetRoleDto> getRoleDtoList = employeeService.listRoleByEmployeeId(employeeId);
@@ -350,4 +357,10 @@ public class EmployeeController {
     public BaseResponse<ListEmployeeDto> getTechnicianById(@PathVariable("employeeId") Integer employeeId) {
         return BaseResponse.successInstance(employeeMapper.getTechnicianById(employeeId));
     }
+    @ApiOperation("获取所有员工和对应的角色列表")
+    @GetMapping("/getAllEmpAndRole")
+    public BaseResponse<List<EmployeeAndRoleDto>> getAllEmpAndRole() {
+        return BaseResponse.successInstance(employeeMapper.getAllEmpAndRole());
+    }
+
 }
