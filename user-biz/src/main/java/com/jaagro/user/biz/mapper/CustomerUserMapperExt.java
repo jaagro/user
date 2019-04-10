@@ -74,4 +74,29 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
      * @return
      */
     int deleteByCustomerId(@Param("relevanceId") Integer relevanceId);
+
+    /**
+     * 根据standbyId查询
+     *
+     * @param standbyId
+     * @return
+     */
+    CustomerUser selectByStandbyId(@Param("standbyId") Integer standbyId);
+
+    /**
+     * 根据联系人id删除登录账号
+     *
+     * @param standbyId
+     * @return
+     */
+    int deleteByStandbyId(@Param("standbyId") Integer standbyId);
+
+    /**
+     * 根据手机号查询
+     * 如果是新增 查询不包括当前id的
+     *
+     * @param customerUser
+     * @return
+     */
+    CustomerUser selectByPhoneNotStandbyId(CustomerUser customerUser);
 }

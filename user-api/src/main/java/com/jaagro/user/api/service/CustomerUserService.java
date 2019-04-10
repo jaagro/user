@@ -1,6 +1,7 @@
 package com.jaagro.user.api.service;
 
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
+import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 
 import java.util.List;
@@ -41,5 +42,21 @@ public interface CustomerUserService {
      * @param userDto
      * @return
      */
-    Map<String, Object> createCustomerUser(List<CreateCustomerUserDto> userDto);
+    Map<String, Object> createCustomerUser(CreateCustomerUserDto customerUserDto);
+
+    /**
+     * 修改
+     *
+     * @param customerUserDto
+     * @return
+     */
+    Map<String, Object> updateCustomerUser(UpdateCustomerUserDto customerUserDto);
+
+    /**
+     * 根据联系人id删除登录账号
+     *
+     * @param standbyId
+     * @return
+     */
+    Map<String, Object> deleteByStandbyId(Integer standbyId);
 }
