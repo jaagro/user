@@ -3,7 +3,7 @@
 <mapper namespace="com.jaagro.user.biz.mapper.EmployeeRoleMapperExt">
 
     <sql id="role_base">
-      r.id, r.name, r.notes, r.create_time, r.create_user_id, r.modify_time, r.modify_user_id, r.enabled
+      distinct r.id, r.name, r.notes, r.create_time, r.create_user_id, r.modify_time, r.modify_user_id, r.enabled
     </sql>
 
     <select id="listByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
