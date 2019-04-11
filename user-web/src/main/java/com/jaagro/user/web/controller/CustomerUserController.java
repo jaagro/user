@@ -58,7 +58,7 @@ public class CustomerUserController {
             resultMap = customerUserService.createCustomerUser(customerUserDto);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return BaseResponse.errorInstance(ex.getMessage());
+            return BaseResponse.errorInstance(customerUserDto.getPhoneNumber() + "手机号重复。" + ex.getMessage());
         }
         return BaseResponse.service(resultMap);
     }
@@ -80,7 +80,7 @@ public class CustomerUserController {
             resultMap = customerUserService.updateCustomerUser(customerUserDto);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return BaseResponse.errorInstance(ex.getMessage());
+            return BaseResponse.errorInstance(customerUserDto.getPhoneNumber() + "手机号重复。" + ex.getMessage());
         }
         return BaseResponse.service(resultMap);
     }
