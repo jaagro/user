@@ -347,12 +347,12 @@ public class EmployeeController {
     }
 
     /**
-     * 获取技术员列表
+     * 获取单个技术员
      *
      * @return
      * @author yj
      */
-    @ApiOperation("获取技术员列表")
+    @ApiOperation("获取单个技术员")
     @GetMapping("/getTechnician/{employeeId}")
     public BaseResponse<ListEmployeeDto> getTechnicianById(@PathVariable("employeeId") Integer employeeId) {
         return BaseResponse.successInstance(employeeMapper.getTechnicianById(employeeId));
