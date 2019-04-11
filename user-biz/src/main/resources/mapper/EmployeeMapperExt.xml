@@ -129,7 +129,7 @@
         AND r.name = '技术员'
     </select>
     <select id="getTechnicianById" resultMap="ReturnMap" parameterType="java.lang.Integer">
-        SELECT
+        SELECT distinct
             e.id,
             e.name,
             e.phone
