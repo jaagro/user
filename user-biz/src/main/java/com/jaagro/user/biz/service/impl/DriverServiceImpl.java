@@ -5,7 +5,7 @@ import com.jaagro.user.api.constant.AccountType;
 import com.jaagro.user.api.constant.AccountUserType;
 import com.jaagro.user.api.constant.AuditStatus;
 import com.jaagro.user.api.dto.request.CreateDriverDto;
-import com.jaagro.user.api.dto.request.CriteriaDriverDto;
+import com.jaagro.user.api.dto.request.CriteriaDto;
 import com.jaagro.user.api.dto.request.ListDriverCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDriverDto;
 import com.jaagro.user.api.dto.response.DriverReturnDto;
@@ -292,7 +292,7 @@ public class DriverServiceImpl implements DriverService {
      */
     @Override
     public DriverReturnDto getByPhoneNumber(String phoneNumber) {
-        CriteriaDriverDto driverDto = new CriteriaDriverDto();
+        CriteriaDto driverDto = new CriteriaDto();
         driverDto
                 .setPhoneNumber(phoneNumber)
                 .setTenantId(userService.getCurrentUser().getTenantId());

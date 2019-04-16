@@ -1,7 +1,7 @@
 package com.jaagro.user.biz.mapper;
 
 import com.jaagro.constant.UserInfo;
-import com.jaagro.user.api.dto.request.CriteriaDriverDto;
+import com.jaagro.user.api.dto.request.CriteriaDto;
 import com.jaagro.user.api.dto.response.DriverReturnDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -108,5 +108,5 @@ public interface DriverMapperExt extends DriverMapper {
      * @param phoneNumber
      * @return
      */
-    DriverReturnDto selectByPhoneNumber(CriteriaDriverDto driverDto);
+    DriverReturnDto selectByPhoneNumber(CriteriaDto driverDto);
 }

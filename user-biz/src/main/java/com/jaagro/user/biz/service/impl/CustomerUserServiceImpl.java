@@ -2,22 +2,20 @@ package com.jaagro.user.biz.service.impl;
 
 import com.jaagro.constant.UserInfo;
 import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
+import com.jaagro.user.api.dto.request.CriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.entity.CustomerUser;
 import com.jaagro.user.biz.mapper.CustomerUserMapperExt;
-import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
 import com.jaagro.utils.ServiceResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +54,11 @@ public class CustomerUserServiceImpl implements CustomerUserService {
      */
     @Override
     public GetCustomerUserDto getByPhoneNumber(String phoneNumber) {
-        CustomerUser customerUser = customerUserMapperExt.selectByPhoneNumber(phoneNumber);
+        CriteriaDto criteriaDto = new CriteriaDto();
+        criteriaDto
+                .setPhoneNumber(phoneNumber)
+                .setTenantId(userService.getCurrentUser().getTenantId());
+        CustomerUser customerUser = customerUserMapperExt.selectByPhoneNumber(criteriaDto);
         return convertToDto(customerUser);
     }
 
@@ -68,7 +70,7 @@ public class CustomerUserServiceImpl implements CustomerUserService {
      */
     @Override
     public GetCustomerUserDto getCustomerUserByRelevanceId(Integer relevanceId) {
-        CustomerUser customerUser = customerUserMapperExt.selectByRelevanceId(relevanceId);
+        CustomerUser customerUser = customerUserMapperExt.selectByRelevanceId(relevanceId, userService.getCurrentUser().getTenantId());
         return convertToDto(customerUser);
     }
 

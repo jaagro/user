@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class CriteriaDriverDto implements Serializable {
+public class CriteriaDto implements Serializable {
     /**
      * 电话
      */

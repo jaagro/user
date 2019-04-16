@@ -56,7 +56,7 @@
             #{item}
         </foreach>
     </select>
-    <select id="selectByPhoneNumber" parameterType="com.jaagro.user.api.dto.request.CriteriaDriverDto"
+    <select id="selectByPhoneNumber" parameterType="com.jaagro.user.api.dto.request.CriteriaDto"
             resultType="com.jaagro.user.api.dto.response.DriverReturnDto">
         select
         <include refid="Base_Column_List"/>

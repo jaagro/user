@@ -1,6 +1,7 @@
 package com.jaagro.user.biz.mapper;
 
 import com.jaagro.constant.UserInfo;
+import com.jaagro.user.api.dto.request.CriteriaDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.biz.entity.CustomerUser;
 import org.apache.ibatis.annotations.Param;
@@ -54,10 +55,10 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
     /**
      * 根据手机号查询
      *
-     * @param phoneNumber
+     * @param criteriaDto
      * @return
      */
-    CustomerUser selectByPhoneNumber(String phoneNumber);
+    CustomerUser selectByPhoneNumber(CriteriaDto criteriaDto);
 
     /**
      * 根据关联客户id查询
@@ -65,7 +66,7 @@ public interface CustomerUserMapperExt extends CustomerUserMapper {
      * @param relevanceId
      * @return
      */
-    CustomerUser selectByRelevanceId(Integer relevanceId);
+    CustomerUser selectByRelevanceId(@Param("relevanceId") Integer relevanceId, @Param("tenantId") Integer tenantId);
 
     /**
      * 根据关联id删除
