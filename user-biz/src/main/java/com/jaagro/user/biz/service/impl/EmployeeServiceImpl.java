@@ -75,15 +75,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (StringUtils.isEmpty(dto.getPassword())) {
             throw new RuntimeException("密码不能为空");
         }
+        UserInfo currentUser = userService.getCurrentUser();
         Employee employee = new Employee();
         employee.setId(userIdGeneratorFactory.getNextId());
         BeanUtils.copyProperties(dto, employee);
         Map<String, String> stringMap = PasswordEncoder.encodePassword(dto.getPassword());
         if (stringMap.size() > 0) {
             employee
+                    .setTenantId(currentUser.getTenantId())
                     .setSalt(stringMap.get("salt"))
                     .setPassword(stringMap.get("password"))
-                    .setCreateUserId(userService.getCurrentUser().getId());
+                    .setCreateUserId(currentUser.getId());
             this.employeeMapper.insertSelective(employee);
             if (dto.getRoleIds() != null && dto.getRoleIds().length > 0) {
                 this.employeeRoleService.createEmp(dto.getRoleIds(), employee.getId());

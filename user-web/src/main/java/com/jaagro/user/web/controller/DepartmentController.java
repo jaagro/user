@@ -6,6 +6,7 @@ import com.jaagro.user.api.dto.request.UpdateDepartmentDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 import com.jaagro.user.api.service.DepartmentService;
+import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.entity.Department;
 import com.jaagro.user.biz.mapper.DepartmentMapperExt;
 import com.jaagro.user.biz.mapper.EmployeeMapperExt;
@@ -37,6 +38,8 @@ public class DepartmentController {
     private DepartmentMapperExt departmentMapper;
     @Autowired
     private EmployeeMapperExt employeeMapper;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation("新增部门")
     @PostMapping("/department")
@@ -134,7 +137,7 @@ public class DepartmentController {
         if (departmentMapper.listByParentId(department.getId()).size() > 0) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "此部门存在下级，不得删除此部门");
         }
-        if (this.employeeMapper.listByDeptId(id).size() > 0) {
+        if (this.employeeMapper.listByDeptId(id, userService.getCurrentUser().getTenantId()).size() > 0) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "此部门下存在员工，不得删除此部门");
         }
         Map<String, Object> result;

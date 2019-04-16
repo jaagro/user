@@ -11,6 +11,7 @@ import com.jaagro.user.api.dto.response.employee.EmployeeAndRoleDto;
 import com.jaagro.user.api.dto.response.employee.ListEmployeeDto;
 import com.jaagro.user.api.service.EmployeeRoleService;
 import com.jaagro.user.api.service.EmployeeService;
+import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.entity.Employee;
 import com.jaagro.user.biz.mapper.DepartmentMapperExt;
 import com.jaagro.user.biz.mapper.EmployeeMapperExt;
@@ -50,7 +51,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeRoleMapperExt employeeRoleMapper;
     @Autowired
-    private EmployeeRoleService employeeRoleService;
+    private UserService userService;
 
     /**
      * 新增员工
@@ -98,13 +99,12 @@ public class EmployeeController {
     }
 
     /**
-     * 删除
+     * 删除员工[逻辑]
      *
-     * @param id
-     * @param notes
+     * @param deleteEmployeeDto
      * @return
      */
-    @ApiOperation("删除员工[逻辑]")
+    @ApiOperation("")
     @PostMapping("deleteEmpById")
     public BaseResponse deleteById(@RequestBody DeleteEmployeeDto deleteEmployeeDto) {
         if (this.employeeMapper.selectByPrimaryKey(deleteEmployeeDto.getId()) == null) {
@@ -151,9 +151,7 @@ public class EmployeeController {
     /**
      * 修改员工密码
      *
-     * @param oldPassword
-     * @param newPassword
-     * @param id
+     * @param checkCodeDto
      * @return
      */
     @ApiOperation("修改密码")
@@ -287,7 +285,7 @@ public class EmployeeController {
         if (this.departmentMapper.selectByPrimaryKey(deptId) == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "部门不存在");
         }
-        return BaseResponse.successInstance(this.employeeMapper.listByDeptId(deptId));
+        return BaseResponse.successInstance(this.employeeMapper.listByDeptId(deptId, userService.getCurrentUser().getTenantId()));
     }
 
     /**
@@ -311,7 +309,7 @@ public class EmployeeController {
     @ApiOperation("获取全部员工列表")
     @GetMapping("/listEmployee")
     public BaseResponse listEmployee() {
-        return BaseResponse.successInstance(this.employeeMapper.listEmployee());
+        return BaseResponse.successInstance(this.employeeMapper.listEmployee(userService.getCurrentUser().getTenantId()));
     }
 
     /**
@@ -340,7 +338,7 @@ public class EmployeeController {
     @ApiOperation("获取技术员列表")
     @GetMapping("/listTechnician")
     public BaseResponse<List<ListEmployeeDto>> listTechnician() {
-        List<ListEmployeeDto> listEmployeeDtoList = employeeMapper.listTechnician();
+        List<ListEmployeeDto> listEmployeeDtoList = employeeMapper.listTechnician(userService.getCurrentUser().getTenantId());
         if (CollectionUtils.isEmpty(listEmployeeDtoList)) {
             return BaseResponse.queryDataEmpty();
         }
@@ -362,7 +360,7 @@ public class EmployeeController {
     @ApiOperation("获取所有员工和对应的角色列表")
     @GetMapping("/getAllEmpAndRole")
     public BaseResponse<List<EmployeeAndRoleDto>> getAllEmpAndRole() {
-        return BaseResponse.successInstance(employeeMapper.getAllEmpAndRole());
+        return BaseResponse.successInstance(employeeMapper.getAllEmpAndRole(userService.getCurrentUser().getTenantId()));
     }
 
 }
