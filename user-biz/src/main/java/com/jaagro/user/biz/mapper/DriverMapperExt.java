@@ -1,8 +1,8 @@
 package com.jaagro.user.biz.mapper;
 
 import com.jaagro.constant.UserInfo;
+import com.jaagro.user.api.dto.request.CriteriaDriverDto;
 import com.jaagro.user.api.dto.response.DriverReturnDto;
-import com.jaagro.user.biz.entity.Driver;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface DriverMapperExt extends DriverMapper {
      * @param truckId
      * @return
      */
-    List<DriverReturnDto> listDriverByTruckId(Integer truckId);
+    List<DriverReturnDto> listDriverByTruckId(@Param("truckId") Integer truckId, @Param("tenantId") Integer tenantId);
 
     /**
      * 删除司机【逻辑】
@@ -92,7 +92,7 @@ public interface DriverMapperExt extends DriverMapper {
      * @param expiryDateType
      * @return
      */
-    List<DriverReturnDto> listCertificateOverdueNotice(@Param("expiryDateType") Integer expiryDateType);
+    List<DriverReturnDto> listCertificateOverdueNotice(@Param("expiryDateType") Integer expiryDateType, @Param("tenantId") Integer tenantId);
 
     /**
      * 批量查询司机信息 不区分状态
@@ -108,5 +108,5 @@ public interface DriverMapperExt extends DriverMapper {
      * @param phoneNumber
      * @return
      */
-    DriverReturnDto selectByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    DriverReturnDto selectByPhoneNumber(CriteriaDriverDto driverDto);
 }

@@ -5,6 +5,7 @@ import com.jaagro.user.api.constant.AccountType;
 import com.jaagro.user.api.constant.AccountUserType;
 import com.jaagro.user.api.constant.AuditStatus;
 import com.jaagro.user.api.dto.request.CreateDriverDto;
+import com.jaagro.user.api.dto.request.CriteriaDriverDto;
 import com.jaagro.user.api.dto.request.ListDriverCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDriverDto;
 import com.jaagro.user.api.dto.response.DriverReturnDto;
@@ -73,10 +74,16 @@ public class DriverServiceImpl implements DriverService {
         if (driverMapper.getByPhoneNumber(driver.getPhoneNumber()) != null) {
             throw new RuntimeException(driver.getPhoneNumber() + ": 当前手机号已被注册");
         }
+        UserInfo currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("当前登录人无效");
+        }
         Driver dataDriver = new Driver();
         dataDriver.setId(userIdGeneratorFactory.getNextId());
         BeanUtils.copyProperties(driver, dataDriver);
-        dataDriver.setCreateUserId(userService.getCurrentUser().getId());
+        dataDriver
+                .setTenantId(currentUser.getTenantId())
+                .setCreateUserId(currentUser.getId());
         try {
             driverMapper.insertSelective(dataDriver);
         } catch (Exception ex) {
@@ -141,7 +148,7 @@ public class DriverServiceImpl implements DriverService {
      */
     @Override
     public List<DriverReturnDto> listCertificateOverdueNotice(Integer expiryDateType) {
-        return driverMapper.listCertificateOverdueNotice(expiryDateType);
+        return driverMapper.listCertificateOverdueNotice(expiryDateType, userService.getCurrentUser().getTenantId());
     }
 
     /**
@@ -260,7 +267,7 @@ public class DriverServiceImpl implements DriverService {
 //    @Cacheable
     @Override
     public List<DriverReturnDto> listByTruckId(Integer truckId) {
-        return driverMapper.listDriverByTruckId(truckId);
+        return driverMapper.listDriverByTruckId(truckId, userService.getCurrentUser().getTenantId());
     }
 
     @Override
@@ -285,7 +292,11 @@ public class DriverServiceImpl implements DriverService {
      */
     @Override
     public DriverReturnDto getByPhoneNumber(String phoneNumber) {
-        return driverMapper.selectByPhoneNumber(phoneNumber);
+        CriteriaDriverDto driverDto = new CriteriaDriverDto();
+        driverDto
+                .setPhoneNumber(phoneNumber)
+                .setTenantId(userService.getCurrentUser().getTenantId());
+        return driverMapper.selectByPhoneNumber(driverDto);
     }
 
     /**

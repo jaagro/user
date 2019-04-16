@@ -1,6 +1,7 @@
 package com.jaagro.user.biz.mapper;
 
 import com.jaagro.user.api.dto.request.ListDepartmentCriteriaDto;
+import com.jaagro.user.api.dto.request.department.ListCriteriaDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 import org.apache.ibatis.annotations.Param;
@@ -33,7 +34,7 @@ public interface DepartmentMapperExt extends DepartmentMapper {
      *
      * @return
      */
-    List<ListDepartmentDto> listDepartment(@Param("netpoint") Boolean netpoint);
+    List<ListDepartmentDto> listDepartment(ListCriteriaDto listCriteriaDto);
 
     /**
      * 查询网点
@@ -41,7 +42,7 @@ public interface DepartmentMapperExt extends DepartmentMapper {
      * @param netpoint
      * @return
      */
-    List<ListDepartmentDto> listNetPointDepartment(@Param("netpoint") Boolean netpoint);
+    List<ListDepartmentDto> listNetPointDepartment(ListCriteriaDto criteriaDto);
 
     /**
      * 查询当前用户的本部门及以下的部门列表树
@@ -72,7 +73,7 @@ public interface DepartmentMapperExt extends DepartmentMapper {
      * @return
      * @Author gavin 20181203
      */
-    List<DepartmentReturnDto> getAllDepartments();
+    List<DepartmentReturnDto> getAllDepartments(@Param("tenantId") Integer tenantId);
 
     /**
      * 批量通过userId获取dept

@@ -3,6 +3,7 @@ package com.jaagro.user.api.service;
 import com.jaagro.user.api.dto.request.CreateDepartmentDto;
 import com.jaagro.user.api.dto.request.ListDepartmentCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDepartmentDto;
+import com.jaagro.user.api.dto.request.department.ListCriteriaDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 
@@ -54,11 +55,12 @@ public interface DepartmentService {
     Map<String, Object> listByCriteria(ListDepartmentCriteriaDto dto);
 
     /**
-     * 查询部门列表树
+     * 查询部门树
      *
+     * @param listCriteriaDto
      * @return
      */
-    Map<String, Object> listDepartment(Boolean netpoint);
+    Map<String, Object> listDepartment(ListCriteriaDto listCriteriaDto);
 
     /**
      * 获取下级部门的数组
@@ -95,7 +97,7 @@ public interface DepartmentService {
      * @param netpoint
      * @return
      */
-    List<ListDepartmentDto> listNetPointDepartment(Boolean netpoint);
+    List<ListDepartmentDto> listNetPointDepartment(ListCriteriaDto criteriaDto);
 
     /**
      * 获取用户所在部门

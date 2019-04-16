@@ -6,6 +6,7 @@ import com.jaagro.constant.UserInfo;
 import com.jaagro.user.api.dto.request.CreateDepartmentDto;
 import com.jaagro.user.api.dto.request.ListDepartmentCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDepartmentDto;
+import com.jaagro.user.api.dto.request.department.ListCriteriaDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 import com.jaagro.user.api.service.AuthClientService;
@@ -71,11 +72,16 @@ public class DepartmentServiceImpl implements DepartmentService {
                 return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "主管不存在");
             }
         }
+        UserInfo currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return ServiceResult.error(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "当前登录人无效");
+        }
         //创建部门对象
         Department department = new Department();
         BeanUtils.copyProperties(dto, department);
         department
-                .setCreateUserId(userService.getCurrentUser().getId());
+                .setTenantId(currentUser.getTenantId())
+                .setCreateUserId(currentUser.getId());
         departmentMapper.insertSelective(department);
         return ServiceResult.toResult("部门创建成功");
     }
@@ -162,14 +168,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Map<String, Object> listByCriteria(ListDepartmentCriteriaDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<DepartmentReturnDto> departmentReturnDtos = this.departmentMapper.getByCriteriDto(dto);
-        return ServiceResult.toResult(new PageInfo<>(departmentReturnDtos));
+        dto.setTenantId(userService.getCurrentUser().getTenantId());
+        List<DepartmentReturnDto> departmentReturnDtoList = this.departmentMapper.getByCriteriDto(dto);
+        return ServiceResult.toResult(new PageInfo<>(departmentReturnDtoList));
     }
 
     //    @Cacheable
     @Override
-    public Map<String, Object> listDepartment(Boolean netpoint) {
-        return ServiceResult.toResult(this.departmentMapper.listDepartment(netpoint));
+    public Map<String, Object> listDepartment(ListCriteriaDto listCriteriaDto) {
+        listCriteriaDto.setTenantId(userService.getCurrentUser().getTenantId());
+        return ServiceResult.toResult(this.departmentMapper.listDepartment(listCriteriaDto));
     }
 
     /**
@@ -179,8 +187,9 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return
      */
     @Override
-    public List<ListDepartmentDto> listNetPointDepartment(Boolean netpoint) {
-        return departmentMapper.listNetPointDepartment(netpoint);
+    public List<ListDepartmentDto> listNetPointDepartment(ListCriteriaDto criteriaDto) {
+        criteriaDto.setTenantId(userService.getCurrentUser().getTenantId());
+        return departmentMapper.listNetPointDepartment(criteriaDto);
     }
 
     /**
@@ -337,6 +346,6 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public List<DepartmentReturnDto> getAllDepartments() {
-        return departmentMapper.getAllDepartments();
+        return departmentMapper.getAllDepartments(userService.getCurrentUser().getTenantId());
     }
 }

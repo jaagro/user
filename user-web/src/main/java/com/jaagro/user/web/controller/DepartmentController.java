@@ -3,6 +3,7 @@ package com.jaagro.user.web.controller;
 import com.jaagro.user.api.dto.request.CreateDepartmentDto;
 import com.jaagro.user.api.dto.request.ListDepartmentCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDepartmentDto;
+import com.jaagro.user.api.dto.request.department.ListCriteriaDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 import com.jaagro.user.api.service.DepartmentService;
@@ -164,21 +165,24 @@ public class DepartmentController {
     @ApiOperation("查询部门")
     @PostMapping("/listDeparment")
     public BaseResponse listDepartment(@RequestParam(required = false) Boolean netpoint) {
-        return BaseResponse.service(this.departmentService.listDepartment(netpoint));
+        ListCriteriaDto criteriaDto = new ListCriteriaDto();
+        criteriaDto.setNetpoint(netpoint);
+        return BaseResponse.service(this.departmentService.listDepartment(criteriaDto));
     }
 
     @ApiOperation("查询网点部门")
     @PostMapping("/listNetPointDepartment")
     public List<Map<String, String>> listNetPointDepartment(@RequestParam(required = false) Boolean netpoint) {
         List<Map<String, String>> mapList = new ArrayList<>();
-        List<ListDepartmentDto> deptDtos = departmentService.listNetPointDepartment(netpoint);
+        ListCriteriaDto criteriaDto = new ListCriteriaDto();
+        criteriaDto.setNetpoint(netpoint);
+        List<ListDepartmentDto> deptDtos = departmentService.listNetPointDepartment(criteriaDto);
         for (ListDepartmentDto deptDto : deptDtos) {
             Map<String, String> map = new HashMap<>();
             map.put("id", deptDto.getId().toString());
             map.put("departmentName", deptDto.getDepartmentName());
             mapList.add(map);
         }
-
         return mapList;
     }
 

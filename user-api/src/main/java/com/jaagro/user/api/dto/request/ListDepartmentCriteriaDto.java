@@ -25,6 +25,11 @@ public class ListDepartmentCriteriaDto implements Serializable {
     private Integer pageSize;
 
     /**
+     * 租户id
+     */
+    private Integer tenantId;
+
+    /**
      * 关键字
      */
     private String keywords;

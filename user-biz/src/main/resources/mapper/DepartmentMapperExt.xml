@@ -43,6 +43,7 @@
         <include refid="Base_Column_List"/>
         from department
         where enabled = 1
+        and tenant_id = #{tenantId}
         <if test="endDate != null">
             <![CDATA[and create_time <= #{endDate}]]>
         </if>
@@ -54,7 +55,8 @@
         </if>
         order by sort
     </select>
-    <select id="listDepartment" resultMap="ReturnInfo">
+    <select id="listDepartment" resultMap="ReturnInfo"
+            parameterType="com.jaagro.user.api.dto.request.department.ListCriteriaDto">
         select
         <include refid="Return_List"/>
         from department
@@ -63,13 +65,16 @@
         <if test="netpoint != null">
             and netpoint = #{netpoint}
         </if>
+        and tenant_id = #{tenantId}
         order by sort
     </select>
-    <select id="listNetPointDepartment" resultType="com.jaagro.user.api.dto.response.department.ListDepartmentDto">
+    <select id="listNetPointDepartment" parameterType="com.jaagro.user.api.dto.request.department.ListCriteriaDto"
+            resultType="com.jaagro.user.api.dto.response.department.ListDepartmentDto">
         select
         <include refid="Base_Column_List"/>
         from department
         where enabled = 1
+        and tenant_id = #{tenantId}
         <if test="netpoint != null">
             and netpoint = #{netpoint}
         </if>
@@ -102,6 +107,7 @@
         <include refid="Base_Column_List"/>
         from department
         where enabled = 1
+        and tenant_id = #{tenantId}
     </select>
     <select id="listDepartmentByIdList" resultType="com.jaagro.user.api.dto.response.DepartmentReturnDto">
         select

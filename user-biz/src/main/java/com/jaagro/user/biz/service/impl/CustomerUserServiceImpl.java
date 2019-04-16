@@ -5,6 +5,7 @@ import com.jaagro.user.api.dto.request.CreateCustomerUserDto;
 import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
+import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.entity.CustomerUser;
 import com.jaagro.user.biz.mapper.CustomerUserMapperExt;
 import com.jaagro.utils.BaseResponse;
@@ -27,6 +28,8 @@ public class CustomerUserServiceImpl implements CustomerUserService {
 
     @Autowired
     private CustomerUserMapperExt customerUserMapperExt;
+    @Autowired
+    private UserService userService;
 
     /**
      * 根据id获取customerUser
@@ -96,7 +99,13 @@ public class CustomerUserServiceImpl implements CustomerUserService {
         if (user != null) {
             return ServiceResult.error("手机号重复");
         }
+        UserInfo currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return ServiceResult.error("当前登录人无效");
+        }
         customerUser
+                .setCreateUserId(currentUser.getId())
+                .setTenantId(currentUser.getTenantId())
                 .setSalt("42850")
                 .setPassword("da64f37c606c762a7e7d05d8a8a4e2dc");
         customerUserMapperExt.insertSelective(customerUser);
