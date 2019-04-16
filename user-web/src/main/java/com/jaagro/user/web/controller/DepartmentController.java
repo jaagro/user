@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author baiyiran
  */
 @RestController
 @Api(value = "department", description = "部门管理", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -316,6 +316,7 @@ public class EmployeeController {
 
     /**
      * 查询员工拥有的角色
+     *
      * @param employeeId
      * @return
      */
@@ -357,6 +358,7 @@ public class EmployeeController {
     public BaseResponse<ListEmployeeDto> getTechnicianById(@PathVariable("employeeId") Integer employeeId) {
         return BaseResponse.successInstance(employeeMapper.getTechnicianById(employeeId));
     }
+
     @ApiOperation("获取所有员工和对应的角色列表")
     @GetMapping("/getAllEmpAndRole")
     public BaseResponse<List<EmployeeAndRoleDto>> getAllEmpAndRole() {

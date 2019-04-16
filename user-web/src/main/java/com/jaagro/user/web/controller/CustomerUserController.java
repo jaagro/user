@@ -5,6 +5,7 @@ import com.jaagro.user.api.dto.request.UpdateCustomerUserDto;
 import com.jaagro.user.api.dto.response.GetCustomerUserDto;
 import com.jaagro.user.api.service.CustomerUserService;
 import com.jaagro.utils.BaseResponse;
+import io.swagger.annotations.ApiOperation;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -21,11 +22,25 @@ public class CustomerUserController {
     @Autowired
     private CustomerUserService customerUserService;
 
+    /**
+     * 查询单个
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation("查询单个")
     @GetMapping("/customerUser/{id}")
     public GetCustomerUserDto getCustomerUserById(@PathVariable("id") Integer id) {
         return customerUserService.getCustomerUserById(id);
     }
 
+    /**
+     * 通过手机号查询
+     *
+     * @param phoneNumber
+     * @return
+     */
+    @ApiOperation("通过手机号查询")
     @GetMapping("/getCustomerUserByPhoneNumber")
     public BaseResponse<GetCustomerUserDto> getCustomerUserByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
         GetCustomerUserDto getCustomerUserDto = customerUserService.getByPhoneNumber(phoneNumber);
@@ -35,6 +50,13 @@ public class CustomerUserController {
         return BaseResponse.queryDataEmpty();
     }
 
+    /**
+     * 通过关联id查询
+     *
+     * @param relevanceId
+     * @return
+     */
+    @ApiOperation("通过关联id查询")
     @GetMapping("/getCustomerUserByRelevanceId/{relevanceId}")
     public BaseResponse<GetCustomerUserDto> getCustomerUserByRelevanceId(@PathVariable("relevanceId") Integer relevanceId) {
         GetCustomerUserDto getCustomerUserDto = customerUserService.getCustomerUserByRelevanceId(relevanceId);
