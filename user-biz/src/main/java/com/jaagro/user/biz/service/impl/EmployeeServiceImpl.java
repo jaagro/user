@@ -259,6 +259,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Map<String, Object> listByCriteria(ListEmpCriteriaDto criteriaDto) {
         PageHelper.startPage(criteriaDto.getPageNum(), criteriaDto.getPageSize());
+        criteriaDto.setTenantId(userService.getCurrentUser().getTenantId());
         List<Employee> emps = this.employeeMapper.listByCriteria(criteriaDto);
         return ServiceResult.toResult(new PageInfo<>(emps));
     }
