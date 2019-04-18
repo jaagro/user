@@ -10,7 +10,6 @@ import com.jaagro.user.biz.entity.Employee;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author tony
@@ -71,14 +70,14 @@ public interface EmployeeMapperExt extends EmployeeMapper {
      * @param deptId
      * @return
      */
-    List<Employee> listByDeptId(Integer deptId);
+    List<Employee> listByDeptId(@Param("deptId") Integer deptId, @Param("tenantId") Integer tenantId);
 
     /**
      * 获取全部员工列表
      *
      * @return
      */
-    List<ListEmployeeDto> listEmployee();
+    List<ListEmployeeDto> listEmployee(@Param("tenantId") Integer tenantId);
 
     /**
      * id列表获取用户信息列表
@@ -93,7 +92,7 @@ public interface EmployeeMapperExt extends EmployeeMapper {
      *
      * @return
      */
-    List<ListEmployeeDto> listTechnician();
+    List<ListEmployeeDto> listTechnician(@Param("tenantId") Integer tenantId);
 
 
     /**
@@ -105,7 +104,8 @@ public interface EmployeeMapperExt extends EmployeeMapper {
 
     /**
      * 获取所有员工和对应的角色
+     *
      * @return
      */
-    List<EmployeeAndRoleDto> getAllEmpAndRole();
+    List<EmployeeAndRoleDto> getAllEmpAndRole(@Param("tenantId") Integer tenantId);
 }

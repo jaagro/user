@@ -31,6 +31,11 @@ public class ListEmpCriteriaDto {
     private Integer departmentId;
 
     /**
+     * 租户id
+     */
+    private Integer tenantId;
+
+    /**
      * 账号状态(0;注销 1；正常)
      */
     private Boolean enabled;

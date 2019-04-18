@@ -3,9 +3,11 @@ package com.jaagro.user.web.controller;
 import com.jaagro.user.api.dto.request.CreateDepartmentDto;
 import com.jaagro.user.api.dto.request.ListDepartmentCriteriaDto;
 import com.jaagro.user.api.dto.request.UpdateDepartmentDto;
+import com.jaagro.user.api.dto.request.department.ListCriteriaDto;
 import com.jaagro.user.api.dto.response.DepartmentReturnDto;
 import com.jaagro.user.api.dto.response.department.ListDepartmentDto;
 import com.jaagro.user.api.service.DepartmentService;
+import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.entity.Department;
 import com.jaagro.user.biz.mapper.DepartmentMapperExt;
 import com.jaagro.user.biz.mapper.EmployeeMapperExt;
@@ -14,6 +16,7 @@ import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jdk.nashorn.internal.ir.annotations.Ignore;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -25,8 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author baiyiran
  */
+@Slf4j
 @RestController
 @Api(value = "department", description = "部门管理", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DepartmentController {
@@ -37,6 +41,8 @@ public class DepartmentController {
     private DepartmentMapperExt departmentMapper;
     @Autowired
     private EmployeeMapperExt employeeMapper;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation("新增部门")
     @PostMapping("/department")
@@ -134,7 +140,7 @@ public class DepartmentController {
         if (departmentMapper.listByParentId(department.getId()).size() > 0) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "此部门存在下级，不得删除此部门");
         }
-        if (this.employeeMapper.listByDeptId(id).size() > 0) {
+        if (this.employeeMapper.listByDeptId(id, userService.getCurrentUser().getTenantId()).size() > 0) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "此部门下存在员工，不得删除此部门");
         }
         Map<String, Object> result;
@@ -161,21 +167,24 @@ public class DepartmentController {
     @ApiOperation("查询部门")
     @PostMapping("/listDeparment")
     public BaseResponse listDepartment(@RequestParam(required = false) Boolean netpoint) {
-        return BaseResponse.service(this.departmentService.listDepartment(netpoint));
+        ListCriteriaDto criteriaDto = new ListCriteriaDto();
+        criteriaDto.setNetpoint(netpoint);
+        return BaseResponse.service(this.departmentService.listDepartment(criteriaDto));
     }
 
     @ApiOperation("查询网点部门")
     @PostMapping("/listNetPointDepartment")
     public List<Map<String, String>> listNetPointDepartment(@RequestParam(required = false) Boolean netpoint) {
         List<Map<String, String>> mapList = new ArrayList<>();
-        List<ListDepartmentDto> deptDtos = departmentService.listNetPointDepartment(netpoint);
+        ListCriteriaDto criteriaDto = new ListCriteriaDto();
+        criteriaDto.setNetpoint(netpoint);
+        List<ListDepartmentDto> deptDtos = departmentService.listNetPointDepartment(criteriaDto);
         for (ListDepartmentDto deptDto : deptDtos) {
             Map<String, String> map = new HashMap<>();
             map.put("id", deptDto.getId().toString());
             map.put("departmentName", deptDto.getDepartmentName());
             mapList.add(map);
         }
-
         return mapList;
     }
 
@@ -250,5 +259,12 @@ public class DepartmentController {
     @GetMapping("/getDownDeptIdsByDeptId/{deptId}")
     public List<Integer> getDownDeptIdsByDeptId(@PathVariable("deptId") Integer deptId) {
         return departmentService.getDownDeptIdsByDeptId(deptId);
+    }
+
+    @ApiOperation("获取项目部所属大区")
+    @GetMapping("/getRegionByNetworkId/{networkId}")
+    public BaseResponse<DepartmentReturnDto> getRegionByNetworkId(@PathVariable("networkId") Integer networkId){
+        log.info("O getRegionByNetworkId networkId={}",networkId);
+        return BaseResponse.successInstance(departmentService.getRegionByNetworkId(networkId));
     }
 }

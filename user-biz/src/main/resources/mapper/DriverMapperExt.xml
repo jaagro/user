@@ -39,6 +39,7 @@
         from driver
         where truck_id = #{truckId,jdbcType=INTEGER}
         and status != 3
+        and tenant_id = #{tenantId}
     </select>
     <select id="getDriverById" resultType="com.jaagro.user.api.dto.response.DriverReturnDto">
         select
@@ -55,11 +56,15 @@
             #{item}
         </foreach>
     </select>
-    <select id="selectByPhoneNumber" resultType="com.jaagro.user.api.dto.response.DriverReturnDto">
+    <select id="selectByPhoneNumber" parameterType="com.jaagro.user.api.dto.request.CriteriaDto"
+            resultType="com.jaagro.user.api.dto.response.DriverReturnDto">
         select
         <include refid="Base_Column_List"/>
         from driver
-        where phone_number = #{phoneNumber,jdbcType=VARCHAR} and status in (0,1)
+        where
+        phone_number = #{phoneNumber,jdbcType=VARCHAR}
+        and status in (0,1)
+        and tenant_id = #{tenantId}
     </select>
     <update id="updateDriverRegIdByPhoneNumber" parameterType="java.lang.String">
         update driver set registration_id=#{registrationId},modify_time=now(),modify_user_id=99999999 where phone_number=#{phoneNumber}
@@ -79,6 +84,7 @@
         <include refid="Base_Column_List"/>
         from driver
         where status != 3
+        and tenant_id = #{tenantId}
         <if test="expiryDateType==5">
             <![CDATA[
     and expiry_driving_license > NOW() and expiry_driving_license < DATE_ADD(NOW(),INTERVAL 30 DAY);

@@ -39,7 +39,7 @@ public interface CustomerUserService {
     /**
      * 创建customerUser
      *
-     * @param userDto
+     * @param customerUserDto
      * @return
      */
     Map<String, Object> createCustomerUser(CreateCustomerUserDto customerUserDto);

@@ -40,17 +40,24 @@
         from customer_user
         where id = #{id,jdbcType=INTEGER} and status = 1
     </select>
-    <select id="selectByPhoneNumber" resultMap="BaseResultMap">
+    <select id="selectByPhoneNumber" resultMap="BaseResultMap"
+            parameterType="com.jaagro.user.api.dto.request.CriteriaDto">
         SELECT
         <include refid="Base_Column_List"/>
         FROM customer_user
-        WHERE phone_number = #{phoneNumber,jdbcType=VARCHAR} and status = 1
+        WHERE
+        phone_number = #{phoneNumber,jdbcType=VARCHAR}
+        and status = 1
+        and tenant_id = #{tenantId}
     </select>
     <select id="selectByRelevanceId" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM customer_user
-        WHERE where relevance_id = #{relevanceId,jdbcType=INTEGER} and status = 1
+        WHERE
+        relevance_id = #{relevanceId,jdbcType=INTEGER}
+        and status = 1
+        and tenant_id = #{tenantId}
     </select>
     <delete id="deleteByCustomerId" parameterType="java.lang.Integer">
          DELETE
