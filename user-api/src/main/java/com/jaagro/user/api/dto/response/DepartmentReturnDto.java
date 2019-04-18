@@ -12,6 +12,8 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class DepartmentReturnDto implements Serializable {
+
+    private static final long serialVersionUID = 2432611263871934028L;
     /**
      * 部门表主键(网点表)
      */
