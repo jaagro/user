@@ -16,6 +16,7 @@ import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jdk.nashorn.internal.ir.annotations.Ignore;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -29,6 +30,7 @@ import java.util.Map;
 /**
  * @author baiyiran
  */
+@Slf4j
 @RestController
 @Api(value = "department", description = "部门管理", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DepartmentController {
@@ -257,5 +259,12 @@ public class DepartmentController {
     @GetMapping("/getDownDeptIdsByDeptId/{deptId}")
     public List<Integer> getDownDeptIdsByDeptId(@PathVariable("deptId") Integer deptId) {
         return departmentService.getDownDeptIdsByDeptId(deptId);
+    }
+
+    @ApiOperation("获取项目部所属大区")
+    @GetMapping("/getRegionByNetworkId/{networkId}")
+    public BaseResponse<DepartmentReturnDto> getRegionByNetworkId(@PathVariable("networkId") Integer networkId){
+        log.info("O getRegionByNetworkId networkId={}",networkId);
+        return BaseResponse.successInstance(departmentService.getRegionByNetworkId(networkId));
     }
 }

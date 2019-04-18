@@ -51,6 +51,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private AuthClientService authClientService;
     @Autowired
     private BusinessSupportMapperExt businessSupportMapper;
+    private static final String REGION = "大区";
 
     /**
      * 创建部门
@@ -242,6 +243,28 @@ public class DepartmentServiceImpl implements DepartmentService {
             return null;
         } else {
             return new ArrayList<>(set);
+        }
+    }
+
+    /**
+     * 根据网点id查询大区,递归向上查询到部门名称以大区结束截止
+     *
+     * @param networkId
+     * @return
+     */
+    @Override
+    public DepartmentReturnDto getRegionByNetworkId(Integer networkId) {
+        DepartmentReturnDto departmentReturnDto = departmentMapper.getById(networkId);
+        if (departmentReturnDto == null){
+            return null;
+        }
+        if (departmentReturnDto.getLevel() == 1 || departmentReturnDto.getLevel() == null){
+            return departmentReturnDto;
+        }
+        if (departmentReturnDto.getDepartmentName().endsWith(REGION)){
+            return departmentReturnDto;
+        }else {
+            return getRegionByNetworkId(departmentReturnDto.getParentId());
         }
     }
 

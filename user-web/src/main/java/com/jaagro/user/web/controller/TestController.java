@@ -6,10 +6,12 @@ import com.jaagro.user.api.service.DepartmentService;
 import com.jaagro.user.api.service.UserService;
 import com.jaagro.user.biz.config.UserIdGeneratorFactory;
 import com.jaagro.user.biz.mapper.DepartmentMapperExt;
+import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.MD5Utils;
 import com.jaagro.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -49,6 +51,11 @@ public class TestController {
     @GetMapping("/test4")
     public List<Integer> test4(){
         return departmentService.getDownDepartment();
+    }
+
+    @GetMapping("/testGetRegionByNetworkId/{networkId}")
+    public BaseResponse<DepartmentReturnDto> getRegionByNetworkId(@PathVariable("networkId") Integer networkId){
+        return BaseResponse.successInstance(departmentService.getRegionByNetworkId(networkId));
     }
 
     public static void main(String args[]){
